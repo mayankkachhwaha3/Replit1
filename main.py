@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template, redirect, url_for
+from security import auth, admin_permission, limiter
 
 app = Flask(__name__)
 
@@ -15,11 +16,13 @@ def home():
 @app.route("/products", methods=["GET"])
 def get_products():
   return jsonify(products)
-  
+
 @app.route("/output")
+@auth.login_required
+@admin_permission.require()
+@limiter.limit("10/day")
 def output():
   return render_template('output.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
-

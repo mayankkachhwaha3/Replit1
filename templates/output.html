@@ -1,51 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title>Output</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
-    <style>
-      body {
-        background-color: #0a0a0a;
-        color: #fff;
-      }
-      
-      .card {
-        background-color: #444;
-        border: none;
-        margin-top: 50px;
-        margin-bottom: 50px;
-      }
-      
-      .card-header {
-        background-color: #000;
-        color: #fff;
-      }
-      
-      .card-body {
-        font-size: 24px;
-        line-height: 1.5;
-      }
-    </style>
-  </head>
   <body>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col col-md-8">
-          <div class="card">
-            <div class="card-header">
-              <h1>Output</h1>
-            </div>
-            <div class="card-body">
-              <p>This is the output section of your app.</p>
-              <p>Feel free to customize this page to display whatever output you like!</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <h1>Product List</h1>
+    <ul id="product-list"></ul>
+    <script>
+      fetch("/products")
+        .then(response => response.json())
+        .then(products => {
+          const productList = document.getElementById("product-list");
+          products.forEach(product => {
+            const li = document.createElement("li");
+            li.textContent = `${product.id}: ${product.name} ($${product.price})`;
+            productList.appendChild(li);
+          });
+        })
+        .catch(error => {
+          const productList = document.getElementById("product-list");
+          productList.textContent = `Error: ${error.message}`;
+        });
+    </script>
   </body>
 </html>
